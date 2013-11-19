@@ -53,7 +53,7 @@ define(function(){
 
     }
 
-    Capture.snapshot = function(){
+    Capture.prototype.snapshot = function(){
         if ( !stream ) return
         ctx.drawImage( video, 0, 0 )
         snapshot.src = canvas.toDataURL('image/webp')
