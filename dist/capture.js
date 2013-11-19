@@ -31,8 +31,7 @@ define(function(){
         return el.querySelector( 'image' ) || ( image = document.createElement( 'image' )) && (image.src = '') && el.appendChild(image) && image
     }
 
-
-    function Capture( id, opts ){
+    function cpt( id, opts ){
         var el     = id && document.querySelector( id ) || document.body
         , video    = getVideo( el )
         , canvas   = getCanvas( el )
@@ -42,24 +41,31 @@ define(function(){
 
         opts = ( opts === 'hd' && hd ) || ( opts === 'vga' && vga ) || true
 
-        video.addEventListener( 'click', this.snapshot.bind(this), false )
 
         navigator.getUserMedia({ video: opts }, function( stream ){
             video.src = window.URL.createObjectURL( stream )
             mstream   = stream
         })
 
-        el['data-capture'] = this
+        function Capture(){ return this.snapshot.bind(this) }
 
+        Capture.prototype.snapshot = function(){
+            if ( !mstream ) return
+            ctx.drawImage( video, 0, 0 )
+            snapshot.src = canvas.toDataURL('image/webp')
+        }
+
+        Capture.prototype.stream = function(){
+            return mstream
+        }
+
+        video.addEventListener( 'click', this.snapshot.bind(this), false )
+
+        var capture = new Capture
+        return el['data-capture'] = capture
     }
 
-    Capture.prototype.snapshot = function(){
-        if ( !stream ) return
-        ctx.drawImage( video, 0, 0 )
-        snapshot.src = canvas.toDataURL('image/webp')
-    }
 
-
-    return Capture
+    return cpt
 
 })
