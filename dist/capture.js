@@ -47,7 +47,7 @@ define(function(){
             mstream   = stream
         })
 
-        function Capture(){ return this.snapshot.bind(this) }
+        function Capture(){ this.snapshot() }
 
         Capture.prototype.snapshot = function(){
             if ( !mstream ) return
@@ -59,7 +59,7 @@ define(function(){
             return mstream
         }
 
-        var capture = new Capture
+        var capture = new Capture()
 
         video.addEventListener( 'click', capture.snapshot.bind(capture), false )
 
