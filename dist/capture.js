@@ -7,15 +7,17 @@ define(function(){
                               navigator.msGetUserMedia
 
     var hd = {
-          mandatory: {
+        mandatory: {
             minWidth: 1280,
             minHeight: 720
         }
-        , vga = {
-          mandatory: {
+    }
+    , vga = {
+        mandatory: {
             maxWidth: 640,
             maxHeight: 360
         }
+    }
 
     function getVideo( el, video ){
         return el.querySelector( 'video' ) || ( video = document.createElement( 'video' )) && (video.autoplay = true)  && el.appendChild(video) && video
