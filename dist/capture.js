@@ -32,31 +32,40 @@ define(function(){
         return el.querySelector( 'canvas' ) || ( canvas = document.createElement( 'canvas' )) && (canvas.style.display = 'none') && el.appendChild(canvas) && canvas
     }
 
+    /**
+     * if opts.image === null, don't use a preview image
+     */
 
     function cpt( id, opts ){
         var el     = id && document.querySelector( id ) || document.body
-        , img      = getImage( el )
-        , video    = getVideo( el )
+        , img      = opts ? (opts.image===null ? null : ( opts.image && document.querySelector( opts.image ) || getImage( el ))) : getImage( el )
+        , video    = opts && opts.video && document.querySelector( opts.video ) || getVideo( el )
         , canvas   = getCanvas( el )
         , ctx      = canvas.getContext( '2d' )
         , mstream  = null
 
         console.log(img, video, canvas)
+        opts = opts || {}
+        opts.quality = opts.quality || ( opts === 'hd' && hd ) || ( opts === 'vga' && vga ) || vga
 
-        opts = ( opts === 'hd' && hd ) || ( opts === 'vga' && vga ) || true
-
-
-        navigator.getUserMedia({ video: opts }, function( stream ){
-            video.src = window.URL.createObjectURL( stream )
-            mstream   = stream
-        })
 
         function Capture(){ this.snapshot() }
+
+        Capture.prototype.startStream = function(){
+            navigator.getUserMedia({ video: opts.quality }, function( stream ){
+                video.src = window.URL.createObjectURL( stream )
+                mstream   = stream
+                el.dispatchEvent( new CustomEvent( 'capture.stream.started', { detail : stream }))
+            })
+        }
+
 
         Capture.prototype.snapshot = function(){
             if ( !mstream ) return
             ctx.drawImage( video, 0, 0 )
-            img.src = canvas.toDataURL('image/webp')
+            var dataurl = canvas.toDataURL('image/webp')
+            img.src = dataurl
+            el.dispatchEvent( new CustomEvent( 'capture.snapshot.taken', { detail : dataurl }))
         }
 
         Capture.prototype.stream = function(){
@@ -65,7 +74,8 @@ define(function(){
 
         var capture = new Capture()
 
-        video.addEventListener( 'click', capture.snapshot.bind(capture), false )
+        el.addEventListener( 'capture.snapshot.take', capture.snapshot.bind(capture), false )
+        el.addEventListener( 'capture.stream.start', capture.streamStart.bind(capture), false )
 
         return el['data-capture'] = capture
     }
