@@ -54,6 +54,8 @@ define(["jquery"], function($){
         Capture.prototype.startStream = function(){
             navigator.getUserMedia({ video: opts.quality }, function( stream ){
                 video.src = window.URL.createObjectURL( stream )
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
                 mstream   = stream
                 $el.trigger( 'capture.stream.started', stream )
             })
@@ -65,7 +67,6 @@ define(["jquery"], function($){
             ctx.drawImage( video, 0, 0 )
             var dataurl = canvas.toDataURL('image/webp')
             img && (img.src = dataurl)
-            console.log(dataurl.length)
             $el.trigger( 'capture.snapshot.taken', dataurl )
         }
 
