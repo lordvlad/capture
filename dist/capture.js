@@ -20,7 +20,8 @@ define(function(){
     }
 
     function getImage( el, img ){
-        return el.querySelector( 'img'  )   || ( img  = document.createElement( 'img' ))      && (img.src = '')                  && el.appendChild(img)    && img
+        console.log( el )
+        return el.querySelector( 'img'  )   || ( img  = document.createElement( 'img' ))      && (img.src = '')                  || el.appendChild(img)    && img
     }
 
     function getVideo( el, video ){
@@ -39,7 +40,9 @@ define(function(){
         , canvas   = getCanvas( el )
         , ctx      = canvas.getContext( '2d' )
         , mstream  = null
+
         console.log(img, video, canvas)
+
         opts = ( opts === 'hd' && hd ) || ( opts === 'vga' && vga ) || true
 
 
