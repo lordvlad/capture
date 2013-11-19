@@ -75,8 +75,8 @@ define(function(){
         var capture = new Capture()
 
         el.addEventListener( 'capture.snapshot.take', capture.snapshot.bind(capture), false )
-        el.addEventListener( 'capture.stream.start', capture.streamStart.bind(capture), false )
-        el.addEventListener( 'capture.stream.stop', function(){ mstream && mstram.stop && mstream.stop() }, false )
+        el.addEventListener( 'capture.stream.start', capture.startStream.bind(capture), false )
+        el.addEventListener( 'capture.stream.stop', function(){ if (!mstream) return; mstream.stop(); el.dispatchEvent( new CustomEvent( 'capture.stream.stopped' )) }, false )
 
         return el['data-capture'] = capture
     }
