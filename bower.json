@@ -1,0 +1,23 @@
+{
+  "name": "capture",
+  "version": "0.0.0",
+  "authors": [
+    "Waldemar Reusch <waldemar.reusch@googlemail.com>"
+  ],
+  "description": "capture pictures the HTML5 way",
+  "main": "dist/capture.js",
+  "keywords": [
+    "webcam",
+    "capture",
+    "html5"
+  ],
+  "license": "MIT",
+  "homepage": "github.com/lordvlad/capture",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
