@@ -59,9 +59,10 @@ define(function(){
             return mstream
         }
 
-        video.addEventListener( 'click', this.snapshot.bind(this), false )
-
         var capture = new Capture
+
+        video.addEventListener( 'click', capture.snapshot.bind(capture), false )
+
         return el['data-capture'] = capture
     }
 
