@@ -76,6 +76,7 @@ define(function(){
 
         el.addEventListener( 'capture.snapshot.take', capture.snapshot.bind(capture), false )
         el.addEventListener( 'capture.stream.start', capture.streamStart.bind(capture), false )
+        el.addEventListener( 'capture.stream.stop', function(){ mstream && mstram.stop && mstream.stop() }, false )
 
         return el['data-capture'] = capture
     }
