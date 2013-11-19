@@ -1,4 +1,4 @@
-define(["jQuery"], function($){
+define(["jquery"], function($){
 
     // cross browser compatibility
     navigator.getUserMedia  = navigator.getUserMedia ||
