@@ -65,6 +65,7 @@ define(["jquery"], function($){
             ctx.drawImage( video, 0, 0 )
             var dataurl = canvas.toDataURL('image/webp')
             img && (img.src = dataurl)
+            console.log(dataurl.length)
             $el.trigger( 'capture.snapshot.taken', dataurl )
         }
 
