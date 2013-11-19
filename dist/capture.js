@@ -45,7 +45,6 @@ define(["jquery"], function($){
         , ctx      = canvas.getContext( '2d' )
         , mstream  = null
 
-        console.log(img, video, canvas)
         opts = opts || {}
         opts.quality = opts.quality || ( opts === 'hd' && hd ) || ( opts === 'vga' && vga ) || vga
 
@@ -53,6 +52,7 @@ define(["jquery"], function($){
         function Capture(){ this.snapshot() }
 
         Capture.prototype.startStream = function(){
+            console.log("startStream")
             navigator.getUserMedia({ video: opts.quality }, function( stream ){
                 video.src = window.URL.createObjectURL( stream )
                 mstream   = stream
@@ -65,7 +65,7 @@ define(["jquery"], function($){
             if ( !mstream ) return
             ctx.drawImage( video, 0, 0 )
             var dataurl = canvas.toDataURL('image/webp')
-            img.src = dataurl
+            img && (img.src = dataurl)
             $el.trigger( 'capture.snapshot.taken', dataurl )
         }
 
@@ -75,8 +75,11 @@ define(["jquery"], function($){
 
         var capture = new Capture()
 
-        $el.on( 'capture.snapshot.take', capture.snapshot.bind(capture), false )
-        $el.on( 'capture.stream.start', capture.startStream.bind(capture), false )
+        $el.on( 'capture.snapshot.take', capture.snapshot.bind(capture))
+        $el.on( 'capture.stream.start', function(){
+            console.log('starting stream')
+            capture.startStream()
+        })
         $el.on( 'capture.stream.stop', function(){
             if (!mstream) return;
             mstream.stop();
