@@ -1,4 +1,4 @@
-define(function(){
+define(["jQuery"], function($){
 
     // cross browser compatibility
     navigator.getUserMedia  = navigator.getUserMedia ||
@@ -38,6 +38,7 @@ define(function(){
 
     function cpt( id, opts ){
         var el     = id && document.querySelector( id ) || document.body
+        , $el      = id && $(id) || $(document.body)
         , img      = opts ? (opts.image===null ? null : ( opts.image && document.querySelector( opts.image ) || getImage( el ))) : getImage( el )
         , video    = opts && opts.video && document.querySelector( opts.video ) || getVideo( el )
         , canvas   = getCanvas( el )
@@ -55,7 +56,7 @@ define(function(){
             navigator.getUserMedia({ video: opts.quality }, function( stream ){
                 video.src = window.URL.createObjectURL( stream )
                 mstream   = stream
-                el.dispatchEvent( new CustomEvent( 'capture.stream.started', { detail : stream }))
+                $el.trigger( 'capture.stream.started', stream )
             })
         }
 
@@ -65,7 +66,7 @@ define(function(){
             ctx.drawImage( video, 0, 0 )
             var dataurl = canvas.toDataURL('image/webp')
             img.src = dataurl
-            el.dispatchEvent( new CustomEvent( 'capture.snapshot.taken', { detail : dataurl }))
+            $el.trigger( 'capture.snapshot.taken', dataurl )
         }
 
         Capture.prototype.stream = function(){
@@ -74,11 +75,16 @@ define(function(){
 
         var capture = new Capture()
 
-        el.addEventListener( 'capture.snapshot.take', capture.snapshot.bind(capture), false )
-        el.addEventListener( 'capture.stream.start', capture.startStream.bind(capture), false )
-        el.addEventListener( 'capture.stream.stop', function(){ if (!mstream) return; mstream.stop(); el.dispatchEvent( new CustomEvent( 'capture.stream.stopped' )) }, false )
+        $el.on( 'capture.snapshot.take', capture.snapshot.bind(capture), false )
+        $el.on( 'capture.stream.start', capture.startStream.bind(capture), false )
+        $el.on( 'capture.stream.stop', function(){
+            if (!mstream) return;
+            mstream.stop();
+            $el.trigger( 'capture.stream.stopped' )
+        })
 
-        return el['data-capture'] = capture
+        $el.data('capture', capture )
+        return capture
     }
 
 
