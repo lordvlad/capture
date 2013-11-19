@@ -19,26 +19,27 @@ define(function(){
         }
     }
 
+    function getImage( el, img ){
+        return el.querySelector( 'img'  )   || ( img  = document.createElement( 'img' ))      && (img.src = '')                  && el.appendChild(img)    && img
+    }
+
     function getVideo( el, video ){
-        return el.querySelector( 'video'  ) || ( video  = document.createElement( 'video' ))  && (video.autoplay = true)         && el.appendChild(video) && video
+        return el.querySelector( 'video'  ) || ( video  = document.createElement( 'video' ))  && (video.autoplay = true)         && el.appendChild(video)  && video
     }
 
     function getCanvas( el, canvas ){
         return el.querySelector( 'canvas' ) || ( canvas = document.createElement( 'canvas' )) && (canvas.style.display = 'none') && el.appendChild(canvas) && canvas
     }
 
-    function getImage( el, image ){
-        return el.querySelector( 'image'  ) || ( image  = document.createElement( 'img' ))  && (image.src = '')                && el.appendChild(image) && image
-    }
 
     function cpt( id, opts ){
         var el     = id && document.querySelector( id ) || document.body
+        , img      = getImage( el )
         , video    = getVideo( el )
         , canvas   = getCanvas( el )
-        , snapshot = getImage( el )
         , ctx      = canvas.getContext( '2d' )
         , mstream  = null
-
+        console.log(img, video, canvas)
         opts = ( opts === 'hd' && hd ) || ( opts === 'vga' && vga ) || true
 
 
@@ -52,7 +53,7 @@ define(function(){
         Capture.prototype.snapshot = function(){
             if ( !mstream ) return
             ctx.drawImage( video, 0, 0 )
-            snapshot.src = canvas.toDataURL('image/webp')
+            img.src = canvas.toDataURL('image/webp')
         }
 
         Capture.prototype.stream = function(){
