@@ -20,7 +20,7 @@ define(function(){
     }
 
     function getVideo( el, video ){
-        return el.querySelector( 'video' ) || ( video = document.createElement( 'video' )) && (video.autoplay = true)  && el.appendChild(video) && video
+        return el.querySelector( 'video'  ) || ( video  = document.createElement( 'video' ))  && (video.autoplay = true)         && el.appendChild(video) && video
     }
 
     function getCanvas( el, canvas ){
@@ -28,15 +28,15 @@ define(function(){
     }
 
     function getImage( el, image ){
-        return el.querySelector( 'image' ) || ( image = document.createElement( 'image' )) && (image.src = '') && el.appendChild(image) && image
+        return el.querySelector( 'image'  ) || ( image  = document.createElement( 'img' ))  && (image.src = '')                && el.appendChild(image) && image
     }
 
     function cpt( id, opts ){
         var el     = id && document.querySelector( id ) || document.body
         , video    = getVideo( el )
         , canvas   = getCanvas( el )
-        , ctx      = canvas.getContext( '2d' )
         , snapshot = getImage( el )
+        , ctx      = canvas.getContext( '2d' )
         , mstream  = null
 
         opts = ( opts === 'hd' && hd ) || ( opts === 'vga' && vga ) || true
