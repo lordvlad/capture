@@ -52,7 +52,6 @@ define(["jquery"], function($){
         function Capture(){ this.snapshot() }
 
         Capture.prototype.startStream = function(){
-            console.log("startStream")
             navigator.getUserMedia({ video: opts.quality }, function( stream ){
                 video.src = window.URL.createObjectURL( stream )
                 mstream   = stream
@@ -76,10 +75,7 @@ define(["jquery"], function($){
         var capture = new Capture()
 
         $el.on( 'capture.snapshot.take', capture.snapshot.bind(capture))
-        $el.on( 'capture.stream.start', function(){
-            console.log('starting stream')
-            capture.startStream()
-        })
+        $el.on( 'capture.stream.start', capture.startStream.bind(capture))
         $el.on( 'capture.stream.stop', function(){
             if (!mstream) return;
             mstream.stop();
