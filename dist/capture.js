@@ -54,8 +54,6 @@ define(["jquery"], function($){
         Capture.prototype.startStream = function(){
             navigator.getUserMedia({ video: opts.quality }, function( stream ){
                 video.src = window.URL.createObjectURL( stream )
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
                 mstream   = stream
                 $el.trigger( 'capture.stream.started', stream )
             })
@@ -82,6 +80,13 @@ define(["jquery"], function($){
             if (!mstream) return;
             mstream.stop();
             $el.trigger( 'capture.stream.stopped' )
+        })
+
+        $el.on( 'capture.stream.started', function(){
+            setTimeout(function(){
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+            },50)
         })
 
         $el.data('capture', capture )
