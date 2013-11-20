@@ -86,7 +86,7 @@ define(["jquery"], function($){
             setTimeout(function(){
                 canvas.width = video.videoWidth;
                 canvas.height = video.videoHeight;
-            },50)
+            },100)
         })
 
         $el.data('capture', capture )
