@@ -79,6 +79,7 @@ define(["jquery"], function($){
         $el.on( 'capture.stream.stop', function(){
             if (!mstream) return;
             mstream.stop();
+            mstream = null;
             $el.trigger( 'capture.stream.stopped' )
         })
 
