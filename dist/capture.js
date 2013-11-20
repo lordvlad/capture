@@ -47,6 +47,7 @@ define(["jquery"], function($){
 
         opts = opts || {}
         opts.quality = opts.quality || ( opts === 'hd' && hd ) || ( opts === 'vga' && vga ) || vga
+        opts.extension = opts.extension || 'webp'
 
 
         function Capture(){ this.snapshot() }
@@ -63,7 +64,7 @@ define(["jquery"], function($){
         Capture.prototype.snapshot = function(){
             if ( !mstream ) return
             ctx.drawImage( video, 0, 0 )
-            var dataurl = canvas.toDataURL('image/webp')
+            var dataurl = canvas.toDataURL('image/'+this.opts.extension)
             img && (img.src = dataurl)
             $el.trigger( 'capture.snapshot.taken', dataurl )
         }
@@ -73,6 +74,7 @@ define(["jquery"], function($){
         }
 
         var capture = new Capture()
+        capture.opts = opts
 
         $el.on( 'capture.snapshot.take', capture.snapshot.bind(capture))
         $el.on( 'capture.stream.start', capture.startStream.bind(capture))
