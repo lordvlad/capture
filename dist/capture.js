@@ -57,7 +57,7 @@ define(["jquery"], function($){
                 video.src = window.URL.createObjectURL( stream )
                 mstream   = stream
                 $el.trigger( 'capture.stream.started', stream )
-            })
+            }, window.alert.bind(window))
         }
 
 
