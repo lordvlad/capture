@@ -44,11 +44,11 @@ define(["jquery"], function($){
         , canvas   = getCanvas( el )
         , ctx      = canvas.getContext( '2d' )
         , mstream  = null
+        , width    = height = 0
 
         opts = opts || {}
         opts.quality = opts.quality || ( opts === 'hd' && hd ) || ( opts === 'vga' && vga ) || vga
         opts.extension = opts.extension || 'webp'
-
 
         function Capture(){ this.snapshot() }
 
@@ -63,7 +63,11 @@ define(["jquery"], function($){
 
         Capture.prototype.snapshot = function(){
             if ( !mstream ) return
-            ctx.drawImage( video, 0, 0 )
+            if ( width === 0 ){
+                width = canvas.width  = video.videoWidth;
+                height = canvas.height = video.videoHeight;
+            }
+            ctx.drawImage( video, 0, 0, width, height )
             var dataurl = canvas.toDataURL('image/'+this.opts.extension)
             img && (img.src = dataurl)
             $el.trigger( 'capture.snapshot.taken', dataurl )
@@ -83,13 +87,6 @@ define(["jquery"], function($){
             mstream.stop();
             mstream = null;
             $el.trigger( 'capture.stream.stopped' )
-        })
-
-        $el.on( 'capture.stream.started', function(){
-            setTimeout(function(){
-                canvas.width = video.videoWidth;
-                canvas.height = video.videoHeight;
-            },100)
         })
 
         $el.data('capture', capture )
